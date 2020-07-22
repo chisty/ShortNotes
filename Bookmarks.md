@@ -9,3 +9,4 @@
 1. Code Smells
 1. Docker Commands
 1. Presentation slides.
+1. Database Isolation levels.
