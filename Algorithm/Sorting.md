@@ -32,7 +32,7 @@ private List<int> Sort(List<int> temp)
     for (var i = 1; i < temp.Count; i++)	//loop through each element.
     {
         if (temp[i] < pivot)	    left.Add(temp[i]);	        //if item is less than pivot, insert into left
-        else				        right.Add(temp[i]);         //if item is greater, insert into right
+        else		            right.Add(temp[i]);         //if item is greater, insert into right
     }
 
     left = Sort(left);	            //now try to sort the left sub list 
