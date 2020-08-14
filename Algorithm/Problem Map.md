@@ -2,7 +2,7 @@
 ------------
 Here, I will try to map problem patterns to specific or closer strategies. This will help to find right approach to solve the problem.  Since there is always a finite set of problem patterns, we can easily group them. 
 
-[Here,](https://medium.com/better-programming/the-ultimate-strategy-to-preparing-for-the-coding-interview-ee9f7eb439f3 "Here,") is a very good article related to this. **Must Read!**
+[Here,](https://medium.com/better-programming/the-ultimate-strategy-to-preparing-for-the-coding-interview-ee9f7eb439f3 "Here,") is a very good article related to this. **Must Read!**  The summary of this article is written below:
 
 #### Ad-Hoc / Observation
 ------------
