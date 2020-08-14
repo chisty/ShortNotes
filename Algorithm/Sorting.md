@@ -31,13 +31,13 @@ private List<int> Sort(List<int> temp)
     var pivot = temp[0];
     for (var i = 1; i < temp.Count; i++)	//loop through each element.
     {
-        if (temp[i] < pivot)	 left.Add(temp[i]);	 //if item is less than pivot, insert into left
-        else				    right.Add(temp[i]); //if item is greater, insert into right
+        if (temp[i] < pivot)	    left.Add(temp[i]);	        //if item is less than pivot, insert into left
+        else				        right.Add(temp[i]);         //if item is greater, insert into right
     }
 
-    left = Sort(left);	//now try to sort the left sub list 
-    left.Add(pivot);   	//add pivot after the left sorted list, all left item is less than pivot.
-    left.AddRange(Sort(right)); //now try to sort the right sub list, and append the sorted list.
+    left = Sort(left);	            //now try to sort the left sub list 
+    left.Add(pivot);   	            //add pivot after the left sorted list, all left item is less than pivot.
+    left.AddRange(Sort(right));     //now try to sort the right sub list, and append the sorted list.
     return left;
 }
 
@@ -66,8 +66,8 @@ private int GetPivotByPartition(int[] data, int start, int end)
             index++;
         }
     }
-    temp = data[end];	//here data[end] is basically pivot item.
-    data[end] = data[index];	//swap data[end]/pivot with index.
+    temp = data[end];	            //here data[end] is basically pivot item.
+    data[end] = data[index];	    //swap data[end]/pivot with index.
     data[index] = temp;
     return index;
 }
