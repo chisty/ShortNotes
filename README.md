@@ -6,9 +6,9 @@ Short notes of my learning to track and recall the information. The description 
     
 -   ### [Algorithm](Algorithm/Algorithm.md)
     
-    -   [Problem Map](Algorithms/Problem%20Map.md)
+    -   [Problem Map](Algorithm/Problem%20Map.md)
         
-    -   Sorting
+    -   [Sorting](Algorithm/Sorting.md)
     
 -   ### Design Pattern
     
