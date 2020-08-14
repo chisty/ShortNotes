@@ -8,5 +8,5 @@ Quick Sort is widely used in every language. In C#, the method `Array.Sort() / L
 
 So, basically the `Array.Sort() / List.Sort()` is a hybrid sort, it  selects different algorithm based on the partition size in runtime.
 
-
+I have found `Golang` also does kind of same, it also use *Shell Sort* when partition is less than 12. Here is the [reference](https://golang.org/src/sort/sort.go).
 
