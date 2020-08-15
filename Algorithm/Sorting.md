@@ -56,10 +56,10 @@ private int GetPivotByPartition(int[] data, int start, int end)
     int pivot = data[end], index = start, temp;
 
     /* start index from 0. We will use index to place the elements which is smaller than pivot. So, loop through each item,
-    if item is less than pivot, put it in the position pointed by index (basically which is the first position since index is 0 at first). 
-    Then increment index. when the loop completes, we know that all the item before current index position is lower than the pivot. Now,
-    place pivot at index position. Next, we can do recursive call on left partition and right partition based on pivot position. Eventually,
-    full list will be sorted. */
+    if item is less than pivot, put it in the position pointed by index (basically which is the first position since index 
+    is 0 at first). Then increment index. when the loop completes, we know that all the item before current index position
+    is lower than the pivot. Now, place pivot at index position. Next, we can do recursive call on left partition and right
+    partition based on pivot position. Eventually, full list will be sorted. */
     
     for (int i = start; i < end; i++)
     {
