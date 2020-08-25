@@ -10,7 +10,7 @@ Short notes of my learning to track and recall the information. The description 
         
     -   [Sorting](Algorithm/Sorting.md)
     
--   ### Design Pattern
+-   ### Architecture
     
 -   ### System Design
     
