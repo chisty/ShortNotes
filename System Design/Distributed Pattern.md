@@ -38,3 +38,22 @@ Adapter pattern is a single node pattern which helps to connect external service
 - Helps for monitoring. Prometheus is a open source monitoring aggregator which collects metrics and aggregates them into a single time series database. On top of that, it provides visualization, query language. But, it expects every container to expose a specific metrics API which enables Prometheus to monitor wide variety of different programs through single interface. However, Redis does not expose any compatible metrics for Prometheus. Here, an Adapter pattern is quite useful to fetch from Redis container and adapting it to Prometheus metrics.
 - Helps to aggregate logging. In many cases, we use containers produced by another party. So, we can't change the logging behavior. So, an Adapter might be very handy here. Additionally, sometimes we have different types of logging in different files (error, fatal, warning, info), and also in stderr, stdout, console etc. So, if we need to aggregate all log into a single place, Adapters can help us to process different types of log into a specific format.
 - Helps to add customized Health check. 
+
+
+
+## Replicated Load Balanced Service
+
+The pattern consists of scalable amount of servers with a load balancer in front of them. The load balancer can choose round-robin or session stickiness.
+
+### Use Cases
+
+- Stateless service. No state is necessary. It could serve static content or complex middleware/API service to receive response from multiple server and aggregate.
+- Stateless services are replicated to provide *redundancy* and *scale*. To make a service highly available, each service should have **at least 2 replica**. [*For 3-9 (99.9%), we have 1.4min/day |8hr 31m/year downtime (24600.001). For 4-9(99.99%)  52.56 min/year. For 5-9 (99.999%), 5.25min/year  downtime is allowed :(* ] So, if the service never crashes, we need those replicas to upgrade/deploy new versions.
+- Like Health probes, readiness probes for load balancing is important to inform the load balancer. Readiness probes determines if a service/load balancer is ready to serve requests. Its different than health probes since many application requires some time to initialized / populate data before they serve. They may need to connect db, pull request, initialize stores etc. So, we must include a special url to check readiness probe.
+- Session tracked service. Often there is some reason that we want to ensure that a particular user's request should go to a specific server machine. The reason could be like caching user's data or long running state cache etc. Usually, the *session stickiness* is performed by hashing the source & destination ip address and using that key to identify server. This IP based session-stickiness works fine within a cluster (internal IP), not for external ip because of NAT (network address translation). For external session stickiness, application-level tracking like cookies preferred. Often, this is accomplished by consistent hashing. 
+- Application layer replicated service. Like network load balancer, sometimes we can do application level load balancing by protocol mapping, request etc.
+- Caching layer. Varnish is a good caching service.
+- Sidecar pattern caching implementation is simple. But, disadvantage of this approach is we need to create *same* *number of cache replica* like server. If each replica has 1 GB ram and we have 10 server. It is always better to have 2 cache layer with 5GB ram each rather than 10 server with 1GB ram since we can cache more data in 5 GB ram whereas we will redundantly keep same page in 10 server with minimum data. 
+- Caching can break session tracking if not careful. Like, if we use default IP address affinity and load balancing, *all request to API server will go from cache server, not from the end user IP.* So, it could led in a situation that  some replica of API service *will not see any traffic*. So, it is better to use something like cookie or http header for session tracking. 
+- Rate Limiting and Denial-of-Service defense mechanism. 
+- *SSL termination* at load balancer is performed to improve performance since decryption is resource and cpu intensive. So, API layer can do more processing. Also, if we want to communicate using https with different layers, certificates should be different in each layer. Each individual internal service should use its own certificate. Varnish can't do SSL termination, so we can use Nginx to do the termination and then send request from Nginx server to Varnish web cache.
