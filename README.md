@@ -20,4 +20,8 @@ Short notes of my learning to track and recall the information. The description 
     
 -   ### Questions!
     
--   ### Technologies
+- ### Technologies
+
+- **Certifications**
+
+  -   [AWS Developer Associate](Certifiactions/AWS%20Developer%20Associates.md)
