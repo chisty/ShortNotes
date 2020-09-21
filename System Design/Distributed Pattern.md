@@ -57,3 +57,6 @@ The pattern consists of scalable amount of servers with a load balancer in front
 - Caching can break session tracking if not careful. Like, if we use default IP address affinity and load balancing, *all request to API server will go from cache server, not from the end user IP.* So, it could led in a situation that  some replica of API service *will not see any traffic*. So, it is better to use something like cookie or http header for session tracking. 
 - Rate Limiting and Denial-of-Service defense mechanism. 
 - *SSL termination* at load balancer is performed to improve performance since decryption is resource and cpu intensive. So, API layer can do more processing. Also, if we want to communicate using https with different layers, certificates should be different in each layer. Each individual internal service should use its own certificate. Varnish can't do SSL termination, so we can use Nginx to do the termination and then send request from Nginx server to Varnish web cache.
+
+Sharded Service
+
