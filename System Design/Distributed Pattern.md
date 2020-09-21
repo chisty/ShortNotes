@@ -58,5 +58,36 @@ The pattern consists of scalable amount of servers with a load balancer in front
 - Rate Limiting and Denial-of-Service defense mechanism. 
 - *SSL termination* at load balancer is performed to improve performance since decryption is resource and cpu intensive. So, API layer can do more processing. Also, if we want to communicate using https with different layers, certificates should be different in each layer. Each individual internal service should use its own certificate. Varnish can't do SSL termination, so we can use Nginx to do the termination and then send request from Nginx server to Varnish web cache.
 
-Sharded Service
+## Sharded Service
 
+In Replicated services, each replica is capable of serving every request. But, in sharded service, each replica/shard is capable of serving a subset of all request. Sharded services are used for stateful services whereas Replicated services are used for stateless services. 
+
+### Hot Sharding System
+
+If any data (photo,video,post) goes viral or receives huge traffic, the cache shard contains the data becomes "HOT". If there is 3 shard in total, initially each service receives equal traffic. However, when Shard A gets 4 times much traffic than B,C; The hot sharding system moves B shard to same machine of Shard C and replicates Shard A to the second machine of Shard B. So, now 2 shard contains "Hot" A cache, and 1 shard contains B & C. So, now traffic is shared equally among each shard.
+
+## Scatter/Gather
+
+Requests are sent to each replica and each replica will do a small amount of work. Root server will process various partial result to form a single complete response and send back to the client. 
+
+### Use Cases
+
+- Implementation is easy when the process is embarrassingly parallel.
+- To process a 60s job in a single core, we can make it parallel job with 32 core machine which will do the processing within less than 2 second.
+- However, Still using multiple core in a single machine is not ideally perfect since lot of IO, network, disk access cannot be performed  in parallel. In that case, using  multiple machine and different node will make the process faster and improve overall latency.
+- Distributed Document Search. It creates index which is basically a hashtable with  each word to map the document id. So, to get the desired documents with "cat"  & "dog" each node process the data separately and pull document IDS and then intersect between two result set to get the final result and then pull the documents by ID.
+- Adding more leaf to scatter/gather may not actually speed up processing, it also suffers from "straggler " problem. Since the root node waits for each leaf node result, the overall time it takes to processing document is defined by the slowest leaf node.
+
+## Owner Election
+
+There are 2 ways to implement master election. First is to implement a distributed consensus algorithm like **PAXOS & RAFT**, which is very complex. Fortunately, there are large number of distributed key-value stores already implemented such consensus algorithm like **etcd, zookeeper, consul**. The basic primitive is to perform *compare & swap* operation for a particular key. 
+
+- If there are 3 replica A, B, C and A is master and if for some reason, A is fails, Replica C or B will be master. However, if replica is back after some time, B/C will still be the master. 
+- Compare-and-swap atomically writes a new value if the existing value matches the expected value. If the value doesn’t match, it returns false. If the value doesn’t exist and `*currentValue*` is not null, it returns an error. 
+- In addition to compare-and-swap, the key-value stores allow you to set a time-to-live (TTL) for a key. Once the TTL expires, the key is set back to empty  .
+- **etcd**, is a distributed lock server developed by CoreOS. It is used in production at high scale and used by various projects including **Kubernetes**. We need to use distributed locking mechanism for the distributed key-value stores.
+- However, only locking will not achieve anything. Since it is distributed system, a process could fail while holding the lock and there will be no one to release the lock which will make the system stuck. To resolve this, we need to use TTL functionality of the Key-value store. If we don't unlock within a given time, the TTL will unlock it. 
+- Adding TTL also introduce a potential *bug*. For example, Process A obtains the *Lock* with TTL *t1* and ran really slow, longer than t1. Hence the *Lock* expires and Process B acquire the *Lock* since Process A lost the *Lock* due to TTL. After sometime Process A finishes and calls `Unlock().` Process C acquires the *Lock* listening Process B's notification. Process A believes it actually Unlocked the *Lock* since it does not know it lost the lock in the middle of the operation due to TTL. Now, both Process B & C believes they have the *Lock*. This issue can be solved since the key-value store provides a *resource version.*
+- The replica sending request as master needs to be validated if it is still the master or not! To do this, the **hostname** of replica which is holding the Lock, should be *saved* in the *key-value store*. So, if any replica sends any request as a master, the lock-server verifies if that replica is a master or not!
+
+## Work Queue System

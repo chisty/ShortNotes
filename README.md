@@ -16,7 +16,12 @@ Short notes of my learning to track and recall the information. The description 
 -   ### Architecture
     
 -   ### System Design
+    - [Distributed Pattern](System%20Design/Distributed%20Pattern.md)
     
 -   ### Questions!
     
--   ### Technologies
+- ### Technologies
+
+- **Certifications**
+
+  -   [AWS Developer Associate](Certifiactions/AWS%20Developer%20Associates.md)
