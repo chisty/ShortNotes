@@ -14,9 +14,11 @@ Short notes of my learning to track and recall the information. The description 
     -   [Sorting](Algorithm/Sorting.md)
     
 -   ### Architecture
+    -   [Architecture Map](Architecture/Architecture%20Map.md)
     
 -   ### System Design
     - [Distributed Pattern](System%20Design/Distributed%20Pattern.md)
+	- [System Diagram](System%20Design/System%20Diagram.md)
     
 -   ### Questions!
     
