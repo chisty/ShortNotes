@@ -12,7 +12,7 @@ Short notes of my learning to track and recall the information. The description 
 
 - [Algorithm](Algorithm/Algorithm.md)
 
-- [Jargons | Keywords](Jargons.md)
+- [Keywords](keywords.md)
 
 - [Design Principles](Design%20Principles.md)
 
