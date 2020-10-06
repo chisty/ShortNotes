@@ -12,7 +12,7 @@ Short notes of my learning to track and recall the information. The description 
 
 - [Algorithm](Algorithm/Algorithm.md)
 
-- [Keywords](keywords.md)
+- [Keywords](Keywords.md)
 
 - [Design Principles](Design%20Principles.md)
 
